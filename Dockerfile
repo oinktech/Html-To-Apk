@@ -4,18 +4,17 @@ FROM ubuntu:20.04
 # 设置非交互模式，避免在安装软件包时提示交互
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 更新软件包列表并安装 Java、wget 和 Python
+# 更新软件包列表并安装 Java、wget 和 curl
 RUN apt-get update && \
-    apt-get install -y openjdk-11-jdk wget python3 python3-pip && \
+    apt-get install -y openjdk-11-jdk wget curl python3 python3-pip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# 安装 apktool
-RUN wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool && \
-    chmod +x apktool && \
-    mv apktool /usr/local/bin/ && \
-    wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool.jar && \
-    mv apktool.jar /usr/local/bin/ && \
+# 使用 curl 下载 apktool 并处理错误
+RUN curl -o /usr/local/bin/apktool https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool || { echo "Download failed for apktool"; exit 1; } && \
+    chmod +x /usr/local/bin/apktool && \
+    curl -o /usr/local/bin/apktool.jar https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool.jar || { echo "Download failed for apktool.jar"; exit 1; } && \
+    chmod +x /usr/local/bin/apktool.jar && \
     echo '#!/bin/sh\njava -jar /usr/local/bin/apktool.jar "$@"' > /usr/local/bin/apktool && \
     chmod +x /usr/local/bin/apktool
 
