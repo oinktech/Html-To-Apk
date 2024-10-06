@@ -5,8 +5,8 @@ import subprocess
 import uuid
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads/'
-app.config['APK_OUTPUT_FOLDER'] = 'apk_output/'
+app.config['UPLOAD_FOLDER'] = '/app/uploads/'
+app.config['APK_OUTPUT_FOLDER'] = '/app/apk_output/'
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB
 app.config['SECRET_KEY'] = 'supersecretkey'
 
@@ -52,7 +52,7 @@ def upload_file():
 
 @app.route('/download/<filename>')
 def download_apk(filename):
-    return send_from_directory(app.config['APK_OUTPUT_FOLDER'], filename)
+    return send_from_directory(app.config['APK_OUTPUT_FOLDER'], filename, as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(debug=True,port=10000,host='0.0.0.0')
+    app.run(host='0.0.0.0', port=10000,debug=True)
