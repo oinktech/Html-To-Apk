@@ -12,6 +12,7 @@ APK_OUTPUT_FOLDER = 'apk_output'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['APK_OUTPUT_FOLDER'] = APK_OUTPUT_FOLDER
 
+# 創建資料夾
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
@@ -58,4 +59,4 @@ def convert():
         return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=10000, host='0.0.0.0')
