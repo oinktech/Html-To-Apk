@@ -13,10 +13,13 @@ RUN apt-get update && \
 # 使用 curl 下載 apktool 並處理錯誤
 RUN curl -o /usr/local/bin/apktool https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool || { echo "Download failed for apktool"; exit 1; } && \
     chmod +x /usr/local/bin/apktool && \
-    curl -o /usr/local/bin/apktool.jar https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool.jar || { echo "Download failed for apktool.jar"; exit 1; } && \
+    curl -o /usr/local/bin/apktool.jar https://github.com/iBotPeaches/Apktool/releases/latest/download/apktool_2.6.0.jar || { echo "Download failed for apktool.jar"; exit 1; } && \
     chmod +x /usr/local/bin/apktool.jar && \
     echo '#!/bin/sh\njava -jar /usr/local/bin/apktool.jar "$@"' > /usr/local/bin/apktool && \
     chmod +x /usr/local/bin/apktool
+
+# 驗證 apktool.jar 是否有效
+RUN java -jar /usr/local/bin/apktool.jar --version || { echo "apktool.jar is invalid"; exit 1; }
 
 # 設置工作目錄
 WORKDIR /app
@@ -29,7 +32,8 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY . .
 
 # 創建上傳和輸出目錄
-RUN mkdir -p uploads apk_output
+RUN mkdir -p uploads apk_output && \
+    chmod -R 777 uploads apk_output
 
 # 設置啟動命令
 CMD ["python3", "main.py"]
