@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML 轉 APK 轉換器</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/animations.js') }}" defer></script>
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="{{ url_for('static', filename='images/icon.png') }}" alt="Logo" class="logo">
+            <h1>HTML (ZIP) 轉 APK 轉換器</h1>
+        </header>
+        <section class="upload-section">
+            <form action="/convert" method="POST" enctype="multipart/form-data" class="upload-form">
+                <input type="file" name="file" accept=".zip" required class="file-input">
+                <button type="submit" class="convert-button">轉換為 APK</button>
+            </form>
+        </section>
+        <section class="messages">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </section>
+    </div>
+</body>
+</html>
